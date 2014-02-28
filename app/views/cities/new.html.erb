@@ -1,0 +1,10 @@
+<div class="container">
+  <%= render 'layouts/errors' if flash[:errors] %>
+  <%= form_for @city do |f| %>
+    <div class="form-group">
+      <%= f.label :name %><br>
+      <%= f.text_field :name %>
+    </div>
+    <%= f.submit 'Submit', :class => "btn btn-success" %>
+  <% end %>
+</div>

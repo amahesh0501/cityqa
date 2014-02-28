@@ -1,0 +1,48 @@
+<div class="container">
+
+  <br/><br/>
+  <%= link_to "Back to City Page", city_path(@city) %>
+  <br/><br/>
+
+  <div class="row">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-11">
+      <h3><%= @question.title %> </h3>
+      <p><%= @question.body %></p>
+      <% if current_user && current_user.id == @question.user_id %>
+      <%= link_to "Edit Question", edit_city_question_path(@city, @question) %> | <%= link_to "Delete Question", city_question_path(@city, @question), :method => 'delete' %>
+      <% end %>
+    </div>
+  </div>
+
+
+
+  <br/><br/><br/>
+  <h2>Answers</h2>
+
+  <% @question.answers.each do |answer| %>
+  <table class="table table-striped">
+    <tr>
+      <td >
+
+        <p class="answer-body"><%= answer.body %></p>
+        <small class="answer-user">Posted by <%= answer.user.name  unless answer.user.nil? %></small>
+        <% if current_user && current_user.id == answer.user_id %>
+        <%= link_to "Edit Answer", edit_city_question_answer_path(@city, @question, answer) %> | <%= link_to "Delete Answer", city_question_answer_path(@city, @question, answer), :method => 'delete' %>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+
+  <% end %>
+
+
+
+
+
+  <br/><br/>
+  <% if user_signed_in? %>
+  <%= render :template => 'answers/new' %>
+  <% end %>
+</div>

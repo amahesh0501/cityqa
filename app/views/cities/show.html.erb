@@ -1,0 +1,18 @@
+<div class="container">
+  <h2> <%= @city.name %></h2>
+  <% if user_signed_in? %>
+    <%= link_to "Post a new question", new_city_question_path(@city) %>
+  <% end %>
+  <br/><br/>
+  <ul>
+    <% @questions.each do |question| %>
+      <li><%= link_to question.title, city_question_path(@city, question) %></li>
+    <% end %>
+  </ul>
+</div>
+
+  <h4>Friends in this City </h4>
+  <% current_user.friends_in_city(@city.name).each do |friend| %>
+    <p><%= link_to friend['name'], 'http://facebook.com/' + friend['id'] %></p>
+  <% end %>
+</div>
