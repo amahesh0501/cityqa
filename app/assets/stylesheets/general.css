@@ -1,0 +1,29 @@
+ body {
+  padding-top: 60px;
+ }
+
+ .like_button {
+  cursor: pointer;
+ }
+
+ .wrapper {
+     overflow: auto;
+     height: 100%;
+     position: fixed;
+     background: lightgray;
+     width: 178px;
+     float: left;
+ }
+
+ .wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.notifications {
+  color: white;
+  background-color: red;
+  /*padding: 5px;*/
+  border-radius: 10%;
+  float: right;
+  margin-right: 5px;
+}

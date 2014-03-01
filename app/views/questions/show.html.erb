@@ -6,6 +6,12 @@
 
   <div class="row">
     <div class="col-md-1">
+      <div class="col-md-1">
+        <%= link_to image_tag("http://elementcreative.com/_assets/img/icon_thumbsup.png"), votes_path(:voteable_id => @question.id, :voteable_type => "Question"), remote: true, method: :post, :class => 'vote-question' %>
+        <div class="vote-count-question">
+          <%= pluralize(@question.votes.count, 'Vote') %>
+        </div>
+      </div>
     </div>
     <div class="col-md-11">
       <h3><%= @question.title %> </h3>
@@ -25,7 +31,10 @@
   <table class="table table-striped">
     <tr>
       <td >
-
+        <%= link_to image_tag("http://elementcreative.com/_assets/img/icon_thumbsup.png", :height => 25), votes_path(:voteable_id => answer.id, :voteable_type => "Answer"), remote: true, method: :post, :class => 'vote-answer' %>
+        <div class="vote-count-answer">
+          <p><%= pluralize(answer.votes.count, 'Vote') %></p>
+        </div>
         <p class="answer-body"><%= answer.body %></p>
         <small class="answer-user">Posted by <%= answer.user.name  unless answer.user.nil? %></small>
         <% if current_user && current_user.id == answer.user_id %>

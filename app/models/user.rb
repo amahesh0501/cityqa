@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   has_many :answers
   has_many :questions
   has_many :votes
+  has_many :subscriptions
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -12,6 +14,16 @@ class User < ActiveRecord::Base
   # attr_accessible :title, :body
 
   devise :omniauthable, :omniauth_providers => [:facebook]
+
+  def voted_questions
+      votes_for_questions = self.votes.where(voteable_type: "Question")
+      votes_for_questions.map { |vote| Question.find(vote.voteable_id) }
+    end
+
+    def voted_answers
+      votes_for_answers = self.votes.where(voteable_type: "Answer")
+      votes_for_answers.map { |vote| Answer.find(vote.voteable_id) }
+    end
 
   def self.find_for_facebook_oauth(auth)
      where(auth.slice(:provider, :uid)).first_or_create do |user|
@@ -47,5 +59,23 @@ class User < ActiveRecord::Base
     friend_array.select { |f| f['location']['name'].split(',').first == city if f['location']}
   end
 
+  def all_friend_coords
+      friend_array = self.facebook.get_connection('me', 'friends?fields=id,name,location,picture')
+      location_array = friend_array.map { |f| f['location']['name'].split(',').first  if f['location'] }.uniq
+      city_array = City.pluck(:name)
+      filtered_cities = location_array & city_array
+      city_objects = filtered_cities.map { |city| City.find_by_name(city) }
+      city_info_hash = {}
+      city_objects.each { |city| city_info_hash[city.name] = { info: { lat: city.lat, long: city.long, friends: [] } } }
+
+      friend_array.each do |f|
+        location = ""
+        location = f['location']['name'].split(',').first if f['location']
+        if filtered_cities.include?(location)
+          city_info_hash[location][:info][:friends] << { name: f['name'], id: f['id'], photo_url: f['picture']['data']['url'] }
+        end
+      end
+      city_info_hash
+    end
 
 end

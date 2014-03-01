@@ -4,6 +4,8 @@ class Question < ActiveRecord::Base
   belongs_to :city
   has_many :answers
   has_many :votes, as: :voteable
+  has_many :subscriptions
 
   validates :title, :body, :presence => true
+
 end
